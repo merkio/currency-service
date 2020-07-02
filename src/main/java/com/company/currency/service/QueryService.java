@@ -27,7 +27,7 @@ public class QueryService implements IQueryService {
     public List<Query> getHistoryForTheDay(int year, int month, int day) {
         log.info("Get all query for the day [{}-{}-{}]", year, month, day);
         LocalDate from = LocalDate.of(year, month, day);
-        return queryRepository.findAllByCreatedOnBetween(from.atStartOfDay(), from.plusDays(1).atStartOfDay());
+        return queryRepository.findAllByDateBetween(from, from.plusDays(1));
     }
 
     @Override
@@ -38,7 +38,6 @@ public class QueryService implements IQueryService {
             .setDate(year, month, 1)
             .build()
             .getActualMaximum(Calendar.DAY_OF_MONTH);
-        return queryRepository.findAllByCreatedOnBetween(from.atStartOfDay(),
-                                                         from.plusDays(lastDayOfTheMonth).atStartOfDay());
+        return queryRepository.findAllByDateBetween(from, from.plusDays(lastDayOfTheMonth));
     }
 }

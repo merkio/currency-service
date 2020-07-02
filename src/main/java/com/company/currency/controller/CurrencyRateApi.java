@@ -11,5 +11,5 @@ public interface CurrencyRateApi {
 
     CurrencyRateDTO getTrend(LocalDate date, String base, String target);
 
-    List<Query> getQueryHistoryForTheDay(int year, int month, Optional<Integer> day);
+    List<Query> getQueryHistoryForPeriod(int year, int month, Optional<Integer> day);
 }

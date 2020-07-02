@@ -26,7 +26,6 @@ import org.springframework.test.context.jdbc.Sql;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -97,11 +96,13 @@ public class CurrencyRateControllerTest {
 
     @Test
     void getHistoryOfMonth() {
+        LocalDate now = LocalDate.now().minusDays(5);
         Query query = Query.builder()
             .currencyRates(Collections.singletonList(currencyRate))
+            .base(currencyRate.getBase())
+            .target(currencyRate.getTarget())
+            .date(now)
             .build();
-        queryRepository.save(query);
-        query.setCreatedOn(LocalDateTime.now().minusDays(2));
         queryRepository.save(query);
 
         //@formatter:off
@@ -110,7 +111,7 @@ public class CurrencyRateControllerTest {
                 .contentType(ContentType.JSON)
                 .baseUri(baseUrl)
             .when()
-                .get("/history/daily/{year}/{month}", LocalDate.now().getYear(), LocalDate.now().getMonthValue())
+                .get("/history/daily/{year}/{month}", now.getYear(), now.getMonthValue())
                 .prettyPeek()
             .then()
                 .statusCode(HttpStatus.OK.value())
@@ -126,12 +127,17 @@ public class CurrencyRateControllerTest {
 
     @Test
     void getHistoryOfDay() {
+        LocalDate day = LocalDate.now().minusDays(2);
         Query query = Query.builder()
             .currencyRates(Collections.singletonList(currencyRate))
+            .base(currencyRate.getBase())
+            .target(currencyRate.getTarget())
+            .date(day)
             .build();
         queryRepository.save(query);
-        query.setCreatedOn(LocalDateTime.now().minusDays(2));
-        queryRepository.save(query);
+
+        System.out.println("ALL QUERIES:");
+        System.out.println(queryRepository.findAll());
 
         //@formatter:off
         List<Query> response =
@@ -140,9 +146,9 @@ public class CurrencyRateControllerTest {
                 .baseUri(baseUrl)
             .when()
                 .get("/history/daily/{year}/{month}/{day}",
-                     LocalDate.now().getYear(),
-                     LocalDate.now().getMonthValue(),
-                     LocalDate.now().minusDays(2).getDayOfMonth())
+                     day.getYear(),
+                     day.getMonthValue(),
+                     day.getDayOfMonth())
                 .prettyPeek()
             .then()
                 .statusCode(HttpStatus.OK.value())

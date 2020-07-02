@@ -8,6 +8,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,6 +29,12 @@ public class Query {
 
     @CreatedDate
     private LocalDateTime createdOn;
+
+    private String base;
+
+    private String target;
+
+    private LocalDate date;
 
     @JoinColumn(name = "query_id")
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)

@@ -45,7 +45,12 @@ public class CurrencyRateService implements ICurrencyRateService {
             .currentRate(CurrencyUtils.getCurrentRate(ratesResponse.getRates(), date, target))
             .trend(CurrencyUtils.getTrend(ratesResponse.getRates()))
             .build();
-        Query query = Query.builder().currencyRates(Collections.singletonList(currencyRate)).build();
+
+        Query query = Query.builder()
+            .date(date)
+            .base(base)
+            .target(target)
+            .currencyRates(Collections.singletonList(currencyRate)).build();
 
         queryService.save(query);
 

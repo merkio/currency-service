@@ -40,7 +40,7 @@ public class CurrencyRateController implements CurrencyRateApi {
             "/history/daily/{year}/{month}",
             "/history/daily/{year}/{month}/{day}"},
         produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Query> getQueryHistoryForTheDay(@PathVariable("year") int year,
+    public List<Query> getQueryHistoryForPeriod(@PathVariable("year") int year,
                                                 @PathVariable("month") int month,
                                                 @PathVariable("day") Optional<Integer> dayO) {
         return dayO.map(day -> queryService.getHistoryForTheDay(year, month, day))

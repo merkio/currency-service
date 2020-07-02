@@ -24,9 +24,9 @@ CREATE SEQUENCE currency_rates.currency_rates_sequence
 CREATE TABLE IF NOT EXISTS currency_rates.queries
 (
     id         BIGINT PRIMARY KEY,
-    date       TIMESTAMP WITH TIME ZONE,
-    base       CHARACTER(15),
-    target     CHARACTER(15),
+    date       DATE,
+    base       VARCHAR,
+    target     VARCHAR,
     created_on TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
 
@@ -36,15 +36,15 @@ CREATE TABLE IF NOT EXISTS currency_rates.currency_rates
     current_rate DECIMAL(10, 2),
     average      DECIMAL(10, 2),
     trend        VARCHAR,
-    base         CHARACTER(15),
-    target       CHARACTER(15),
+    base         VARCHAR,
+    target       VARCHAR,
     query_id     BIGINT
 );
 
 CREATE TABLE IF NOT EXISTS currency_rates.currencies
 (
     id   BIGINT PRIMARY KEY,
-    code CHARACTER(15) UNIQUE
+    code VARCHAR UNIQUE
 );
 
 ALTER TABLE currency_rates.currency_rates
